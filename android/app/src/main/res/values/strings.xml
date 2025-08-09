@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+   <string name="app_name">Bottube</string>
+<string name="title_activity_main">Bottube</string>
+    <string name="package_name">com.hotdot.videoapp</string>
+    <string name="custom_url_scheme">com.hotdot.videoapp</string>
+</resources>

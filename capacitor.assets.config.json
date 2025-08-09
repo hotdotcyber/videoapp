@@ -1,0 +1,12 @@
+{
+  "icon": {
+    "source": "assets/icon.png",     
+    "foreground": "#ffffff",       
+    "background": "#000000"          
+  },
+  "splash": {
+    "source": "assets/splash.png",  
+    "backgroundColor": "#ffffff",
+    "resizeMode": "contain"
+  }
+}

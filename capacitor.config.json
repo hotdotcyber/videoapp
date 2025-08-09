@@ -1,0 +1,9 @@
+{
+  "appId": "com.hotdot.videoapp",
+  "appName": "Bottube",
+  "webDir": "public",
+  "server": {
+    "url": "https://bolttube.hotdotdigital.co.ke/",
+    "cleartext": true
+  }
+}
