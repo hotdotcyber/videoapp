@@ -28,7 +28,7 @@
 
                 <a wire:navigate href="{{route('home')}}"
                    class="px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition">
-                    <i class="ri-compass-3-line mr-1"></i> Explore Channels
+                    <i class="ri-compass-3-line mr-1"></i> Explore Creators
                 </a>
 
                 <a wire:navigate href="{{ route('video.all') }}"
@@ -52,9 +52,9 @@
                     <a wire:navigate href="{{ route('dashboard') }}"
                        class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Dashboard</a>
                     <a wire:navigate href="{{ route('edit.channel', Auth::user()->channel->slug) }}"
-                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Channel Settings</a>
-                    <a wire:navigate href="#"
-                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile Settings</a>
+                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Page Settings</a>
+                    <a wire:navigate href="{{ route('change-password') }}"
+                       class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Account Settings</a>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit"
@@ -73,7 +73,7 @@
                 <i class="ri-upload-cloud-line mr-2 text-xl"></i> Upload Video
             </a>
 
-            <a wire:navigate "href={{route('home')}}"
+            <a wire:navigate href="{{route('home')}}"
                class="flex items-center text-green-600 px-4 py-2 hover:bg-green-50 rounded transition">
                 <i class="ri-compass-3-line mr-2 text-xl"></i> Explore Channels
             </a>

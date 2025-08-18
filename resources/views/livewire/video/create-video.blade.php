@@ -1,110 +1,91 @@
-<div class="max-w-xl mx-auto p-6 bg-white dark:bg-gray-900 shadow-xl rounded-2xl space-y-8"
-     x-data="{ progress: 0 }"
-     x-on:livewire-upload-start="progress = 0"
-     x-on:livewire-upload-finish="progress = 0"
-     x-on:livewire-upload-error="progress = 0"
-     x-on:livewire-upload-progress="progress = $event.detail.progress"
->
-    <form wire:submit.prevent="uploadImage" enctype="multipart/form-data" class="space-y-6">
+<div class="max-w-2xl mx-auto p-6 bg-white rounded-xl shadow-md space-y-6">
+    <h2 class="text-2xl font-bold text-gray-800">Upload Video</h2>
 
-        {{-- Thumbnail Upload --}}
-        <div class="space-y-1">
-            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
-                Upload Thumbnail <span class="text-xs text-gray-500">(JPG/PNG, max 2MB)</span>
-            </label>
-            <input 
-                type="file"
-                name="image_thumbnail" 
-                wire:model="image_thumbnail" 
-                accept="image/*"
-                class="w-full file:border-0 file:py-2 file:px-4 file:bg-green-50 file:text-green-700 border border-gray-300 dark:border-gray-700 rounded-md text-sm text-gray-700 dark:text-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-green-500"
-            />
-            @error('image_thumbnail') 
-                <p class="text-red-500 text-xs mt-1">{{ $message }}</p> 
-            @enderror
-
-            @if ($image_thumbnail)
-                <div class="mt-4">
-                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Thumbnail Preview:</p>
-                    <img src="{{ $image_thumbnail->temporaryUrl() }}" 
-                         class="w-48 h-auto rounded-md shadow border border-gray-200 dark:border-gray-700" 
-                         alt="Thumbnail Preview">
-                </div>
-            @endif
+    @if (session('success'))
+        <div class="bg-green-100 text-green-800 p-3 rounded-lg">
+            {{ session('success') }}
         </div>
+    @endif
 
-        {{-- Video File Upload --}}
-        <div class="space-y-1">
-            <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300">
-                Select Video <span class="text-xs text-gray-500">(MP4 only)</span>
-            </label>
-            <input 
-                type="file"
-                name="videoFile" 
-                wire:model="videoFile" 
-                accept="video/mp4"
-                @if (!$image_thumbnail) disabled @endif
-                class="w-full file:border-0 file:py-2 file:px-4 file:bg-blue-50 file:text-blue-700 border border-gray-300 dark:border-gray-700 rounded-md text-sm text-gray-700 dark:text-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed"
-            />
-            @error('videoFile') 
-                <p class="text-red-500 text-xs mt-1">{{ $message }}</p> 
-            @enderror
+    <!-- Video Upload -->
+    <div>
+        <label class="block mb-2 font-semibold text-gray-700">Video File</label>
+        <input type="file" id="videoFile" accept="video/*"
+            class="w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            onchange="uploadToBunny(this.files[0], 'video')">
+        <div class="mt-2">
+            <progress id="videoProgress" value="0" max="100" class="w-full"></progress>
         </div>
+        @error('videoFile') 
+            <span class="text-red-500 text-sm">{{ $message }}</span> 
+        @enderror
+    </div>
 
-        {{-- Upload Progress Bar --}}
-        <template x-if="progress > 0">
-            <div class="mt-2">
-                <div class="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
-                    <div 
-                        class="bg-blue-600 h-2.5 rounded-full transition-all duration-300 ease-in-out"
-                        :style="'width: ' + progress + '%'">
-                    </div>
-                </div>
-                <p class="text-sm mt-1 text-blue-600 dark:text-blue-400">Uploading: <span x-text="progress"></span>%</p>
-            </div>
-        </template>
-
-        {{-- Upload Button with Spinner --}}
-        <div class="relative">
-            <button 
-                type="submit"
-                wire:loading.attr="disabled"
-                wire:target="videoFile,image_thumbnail,uploadImage"
-                @if (!$image_thumbnail) disabled @endif
-                class="w-full flex items-center justify-center bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-4 rounded-lg transition duration-200 ease-in-out disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-                <svg 
-                    wire:loading 
-                    wire:target="videoFile,image_thumbnail,uploadImage" 
-                    class="animate-spin h-5 w-5 mr-2 text-white" 
-                    xmlns="http://www.w3.org/2000/svg" 
-                    fill="none" 
-                    viewBox="0 0 24 24"
-                >
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
-                </svg>
-                Upload Video
-            </button>
+    <!-- Thumbnail Upload -->
+    <div>
+        <label class="block mb-2 font-semibold text-gray-700">Thumbnail (Optional)</label>
+        <input type="file" id="thumbnailFile" accept="image/*"
+            class="w-full border-gray-300 rounded-lg shadow-sm focus:border-blue-500 focus:ring-blue-500"
+            onchange="uploadToBunny(this.files[0], 'image')">
+        <div class="mt-2">
+            <progress id="imageProgress" value="0" max="100" class="w-full"></progress>
         </div>
+        @error('image_thumbnail') 
+            <span class="text-red-500 text-sm">{{ $message }}</span> 
+        @enderror
+    </div>
 
-        {{-- Uploading Text --}}
-        <div 
-            wire:loading 
-            wire:target="videoFile,image_thumbnail,uploadImage" 
-            class="text-sm text-blue-500 flex items-center space-x-2 animate-pulse"
-        >
-            <i class="ri-upload-cloud-line text-lg"></i>
-            <span>Uploading your files, please wait...</span>
-        </div>
+    <!-- Save Button -->
+    <button wire:click="saveVideo"
+        class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg shadow">
+        Save Video
+    </button>
 
-        {{-- Success Feedback --}}
-        @if (session()->has('message'))
-            <div class="bg-green-50 border border-green-200 text-green-800 p-3 rounded-lg text-sm flex items-center space-x-2">
-                <i class="ri-check-double-line text-lg"></i>
-                <span>{{ session('message') }}</span>
-            </div>
-        @endif
+    <script>
+        function uploadToBunny(file, type) {
+            if (!file) return;
 
-    </form>
+            let storageZone = "bolt-tube";
+            let apiKey = "767aebb6-c79e-4c83-8a701f990acc-3589-4a39";
+            let uploadUrl = `https://storage.bunnycdn.com/${storageZone}/${file.name}`;
+
+            let progressBar = (type === 'video') ? 
+                document.getElementById("videoProgress") : 
+                document.getElementById("imageProgress");
+
+            let xhr = new XMLHttpRequest();
+            xhr.open("PUT", uploadUrl, true);
+            xhr.setRequestHeader("AccessKey", apiKey);
+            xhr.setRequestHeader("Content-Type", file.type);
+
+            // Track progress
+            xhr.upload.onprogress = function (e) {
+                if (e.lengthComputable) {
+                    let percent = (e.loaded / e.total) * 100;
+                    progressBar.value = percent;
+                }
+            };
+
+            // On upload complete
+            xhr.onload = function () {
+                if (xhr.status === 201 || xhr.status === 200) {
+                    let cdnBase = "https://bolt-tube.b-cdn.net/" + file.name;
+                    if (type === 'video') {
+                        @this.set('videoUrl', cdnBase);
+                    } else {
+                        @this.set('thumbnailUrl', cdnBase);
+                    }
+                    alert(type.charAt(0).toUpperCase() + type.slice(1) + " uploaded successfully!");
+                } else {
+                    alert("Failed to upload " + type);
+                }
+            };
+
+            xhr.onerror = function () {
+                alert("Error uploading " + type);
+            };
+
+            xhr.send(file);
+        }
+    </script>
 </div>

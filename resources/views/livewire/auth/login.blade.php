@@ -1,5 +1,4 @@
 <div class="bg-gray-100 min-h-screen flex items-start justify-center pt-10 px-4">
-
   <div class="bg-white w-full max-w-sm p-6 sm:p-8 rounded-2xl shadow-lg">
     <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Login to Your Account</h2>
 
@@ -46,7 +45,7 @@
         <label class="flex items-center">
           <input type="checkbox" class="mr-2"> Remember me
         </label>
-        <a href="{{route('password.request')}}" class="text-blue-600 hover:underline">Forgot?</a>
+        <a href="{{route('auth.forgot-password')}}" class="text-blue-600 hover:underline">Forgot?</a>
       </div>
 
       <button
@@ -57,10 +56,25 @@
       </button>
     </form>
 
+    <!-- Divider -->
+    <div class="flex items-center my-6">
+      <div class="flex-grow border-t border-gray-300"></div>
+      <span class="mx-2 text-gray-500 text-sm">OR</span>
+      <div class="flex-grow border-t border-gray-300"></div>
+    </div>
+
+    <!-- Google Login -->
+    <a href="{{route('google-auth')}}"
+       class="w-full flex items-center justify-center space-x-2 bg-white border border-gray-300 text-gray-700 py-2.5 rounded-lg shadow-sm hover:bg-gray-50 transition">
+      <img src="https://www.svgrepo.com/show/355037/google.svg" alt="Google Logo" class="w-5 h-5">
+      <span class="text-sm font-medium">Continue with Google</span>
+    </a>
+
     <p class="mt-6 text-center text-sm text-gray-600">
       Don’t have an account?
-      <a href="{{route('auth.register')}}" class="text-blue-600 hover:underline font-medium">Register</a>
+      <a href="{{route('auth.register')}}" class="text-blue-600 hover:underline font-medium">Sign Up</a>
     </p>
 
     @livewire('floating1')
   </div>
+</div>

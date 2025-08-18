@@ -12,15 +12,8 @@
     <!-- Fonts -->
     <link href="https://fonts.bunny.net/css?family=figtree:400,600&display=swap" rel="stylesheet" />
 
-    <!-- Loader CSS -->
-    <style>
-        #loader {
-            transition: opacity 0.5s ease;
-        }
-    </style>
-
     <!-- Vite CSS & JS -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @vite('resources/css/app.css','resources/js/app.js')
 
     <!-- Livewire Styles -->
     @livewireStyles
@@ -32,7 +25,6 @@
 </head>
 
 <body class="bg-white text-black">
-  
 
     @auth
         @livewire('partials.navbar')
@@ -46,6 +38,8 @@
     
 
     @stack('scripts')
+
+
 @livewire('floating1')
 </body>
 </html>

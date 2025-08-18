@@ -11,26 +11,27 @@ class Login extends Component
     public $password;
     public $remember = false; // For "remember me"
 
-    public function userLogin()
-    {
-        $this->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
+   public function userLogin()
+{
+    $this->validate([
+        'email' => 'required|email',
+        'password' => 'required',
+    ]);
 
-        // Use Fortify-compatible Auth::attempt()
-        if (Auth::attempt([
-            'email' => $this->email,
-            'password' => $this->password,
-        ], $this->remember)) {
-
-            session()->regenerate(); // Fortify does this internally
-            return redirect()->intended(route('dashboard')); // or wherever
-        }
-
-        // Show login failure message
-        $this->addError('email', 'These credentials do not match our records.');
+    if (!auth()->attempt(
+        ['email' => $this->email, 'password' => $this->password],
+        $this->remember
+    )) {
+        session()->flash('error', 'Invalid credentials');
+        return;
     }
+
+    session()->regenerate();
+
+    return redirect()->intended(route('dashboard'));
+}
+
+
 
     public function render()
     {

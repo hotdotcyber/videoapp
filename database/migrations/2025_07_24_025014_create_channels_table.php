@@ -14,11 +14,13 @@ return new class extends Migration
         Schema::create('channels', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
+            $table->date('dob')->nullable();
             $table->string('name');
             $table->string('slug');
             $table->string('uid');
-            $table->text('desciption')->nullable();
+            $table->text('description')->nullable();
             $table->string('image')->nullable();
+            $table->boolean('hide')->default(false);
             $table->foreign('user_id')->references('id')->on('users')
                 ->oncascade('delete');
             $table->timestamps();

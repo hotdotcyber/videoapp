@@ -20,8 +20,11 @@ class WatchVideo extends Component
 
      public function countView()
     {
-        $this->video->update([
-            'views' => $this->video->views + 1
-        ]);
+       Video::where('id', $this->video->id)->increment('views');
+       logger()->debug('Video view incremented', [
+        'video_id' => $this->video->id,
+        'trace' => collect(debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 10))->pluck('function')
+    ]);
+         return $this->skipRender();
 }
 }

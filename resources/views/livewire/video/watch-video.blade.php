@@ -12,29 +12,29 @@
             <div class="lg:col-span-2 space-y-6">
                 
                 {{-- Video Player --}}
-                <div class="bg-white rounded-xl overflow-hidden shadow-sm">
-                    <div class="aspect-video">
+                <div class="bg-white rounded-2xl overflow-hidden shadow-md wire:ignore">
+                    <div class="relative w-full bg-gradient-to-br from-gray-900 via-gray-800 to-black flex items-center justify-center">
                         <video
                             id="yt-video"
                             controls
                             preload="auto"
-                            wire:ignore
-                            class="video-js vjs-fill vjs-default-skin vjs-big-play-centered w-full h-full object-cover"
+                            class="video-js vjs-big-play-centered w-full h-auto max-h-[70vh] object-contain rounded-2xl"
                         >
                             <source src="{{ asset($video->path) }}" type="video/mp4" />
-                            <p class="vjs-no-js text-sm text-gray-600">
+                            <p class="vjs-no-js text-sm text-gray-600 text-center">
                                 To view this video please enable JavaScript, and consider upgrading to a
-                                web browser that
-                                <a href="https://videojs.com/html5-video-support/" class="text-blue-500 underline" target="_blank">supports HTML5 video</a>
+                                <a href="https://videojs.com/html5-video-support/" class="text-blue-500 underline" target="_blank">browser that supports HTML5 video</a>
                             </p>
                         </video>
                     </div>
                 </div>
 
-                {{-- Title & Meta --}}
+                {{-- Title + Meta --}}
                 <div class="space-y-1">
                     <h2 class="text-xl font-semibold text-gray-900">{{ $video->title }}</h2>
-                    <p class="text-sm text-gray-600">{{ $video->views }} views • {{ $video->uploaded_date }}</p>
+                    <p class="text-sm text-gray-600">
+                        <livewire:video.views-count :videoId="$video->id" /> • {{ $video->uploaded_date }}
+                    </p>
                 </div>
 
                 {{-- Voting --}}
@@ -73,23 +73,17 @@
         <script src="https://vjs.zencdn.net/7.10.2/video.min.js"></script>
 
         <script>
-            document.addEventListener('livewire:load', () => {
-                const player = videojs('yt-video');
+            let viewCounted = false;
+            var player = videojs('yt-video')
 
-                player.on('timeupdate', function () {
-                    if (this.currentTime() > 3) {
-                        this.off('timeupdate');
-                        window.Livewire?.dispatch('VideoViewed');
-                    }
-                });
-
-                player.ready(() => {
-                    // Attempt to play on load
-                    player.play().catch(() => {
-                        // Ignore autoplay blocking
-                    });
-                });
-            });
+            // Track views after 3 seconds
+            player.on('timeupdate', function() {
+                if (!viewCounted && this.currentTime() > 3) {
+                    viewCounted = true;
+                    this.off('timeupdate');
+                    Livewire.dispatch('VideoViewed');
+                }
+            })
         </script>
     @endpush
 </div>

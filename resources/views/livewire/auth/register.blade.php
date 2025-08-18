@@ -13,9 +13,19 @@
         {{$message}}
       @enderror
       </span>
+      <div>
+    <label class="block text-sm font-medium text-gray-700">Date of Birth</label>
+    <input type="date" wire:model.defer="dob" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
+      </div>
+      <span class="text-red-600 p-2">
+        @error('dob')
+          {{$message}}
+        @enderror
+      </span>
+
 
       <div>
-         <label class="block text-sm font-medium text-gray-700">Channel Name</label>
+         <label class="block text-sm font-medium text-gray-700">Creator Page Name</label>
         <input type="text" wire:model.defer=channel_name class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500" />
       </div>
       <span class="text-red-600 p-2">

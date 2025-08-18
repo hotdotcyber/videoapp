@@ -68,6 +68,18 @@ return [
     ],
 
 
+           'bunnycdn' => [
+            'driver'   => 'ftp',
+            'host'     => 'storage.bunnycdn.com',
+            'username' => env('BUNNYCDN_STORAGE_ZONE'),
+            'password' => env('BUNNYCDN_STORAGE_PASSWORD'),
+            'root'     => '/' . env('BUNNYCDN_STORAGE_ZONE'),
+            'passive'  => true,
+            'ssl'      => false,
+            'timeout'  => 60,
+        ],
+
+
         's3' => [
             'driver' => 's3',
             'key' => env('AWS_ACCESS_KEY_ID'),
